@@ -1,5 +1,6 @@
 package us.myfamily.log.manager;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -12,6 +13,18 @@ public class LogbackManager
                           extends LogManager
 {
 	private static final Logger log = (Logger)org.slf4j.LoggerFactory.getLogger(LogbackManager.class.getName());
+
+	private static final List<String> levels;
+	static
+	{
+		levels = Arrays.asList(new String[] {
+		             Level.TRACE.toString(),
+		             Level.DEBUG.toString(),
+		             Level.INFO.toString(),
+		             Level.WARN.toString(),
+		             Level.ERROR.toString(),
+		             Level.OFF.toString() });
+	}
 
 	@Override
 	public void setLoggers(Map<String, String> parameters)
@@ -51,6 +64,11 @@ public class LogbackManager
 		}
 
 		log.setLevel(currentLevel);
+	}
+
+	public List<String> getLevels()
+	{
+		return levels;
 	}
 
 	@Override

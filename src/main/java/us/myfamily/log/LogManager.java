@@ -1,5 +1,6 @@
 package us.myfamily.log;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import lombok.EqualsAndHashCode;
@@ -9,6 +10,8 @@ public abstract class LogManager
 	public abstract void setLoggers(Map<String, String> parameters);
 
 	public abstract TreeSet<Wrapper> load();
+
+	public abstract List<String> getLevels();
 
 	@EqualsAndHashCode(doNotUseGetters = true, of = "name")
 	public abstract class Wrapper

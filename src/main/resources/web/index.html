@@ -3,8 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <title>Log Level Manager</title>
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.1/jquery.min.js"></script>
+<script type="text/javascript">
+	var manager = {};
+
+	$(document).ready(function() {
+		manager.get();
+	})
+
+	manager.get = function() {
+		$.get("api/manager", function(json) {
+			if(json.status === "success") {
+				manager.load(json.levels, json.loggers);
+			}
+		})
+	}
+
+	manager.load = function(levels, loggers) {
+		/* var form = $("form > table").children().empty(); */
+		
+		$("form > table")
+			.children()
+				.empty()
+			.end()
+			.children("thead")
+				.each(function() {
+					var row = $("<tr><td></td></tr>");
+					for(var i = 0; i < levels.length; i++) {
+						row.append("<td>" + levels[i] + "</td>");
+					}
+					$(this).append(row);
+				})
+			.end()
+			.children("tbody")
+				.each(function() {
+					var tbody = $(this);
+					var template = $("<tr><td></td></tr>");
+					
+					for(var i = 0; i < levels.length; i++) {
+						template.append("<td><input type='radio' value='" + levels[i] + "' title='" + levels[i] + "'/></td>")
+					}
+					
+					for(logger in loggers) {
+						var row = template.clone()
+							.children("td:first")
+								.text(logger)
+							.end()
+							.find("input").each(function() {
+								this.name = logger;
+								if(this.value === loggers[logger]) {
+									this.checked = true;
+								}
+							})
+							.end();
+						tbody.append(row);
+					}
+				})
+			.end();
+	}
+</script>
 </head>
 <body>
-You are here!
+	<form method="POST" action="/api/manager">
+		<table>
+			<thead></thead>
+			<tbody></tbody>
+		</table>
+	</form>
 </body>
 </html>

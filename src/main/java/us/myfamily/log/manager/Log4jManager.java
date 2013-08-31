@@ -1,6 +1,8 @@
 package us.myfamily.log.manager;
 
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,20 @@ import us.myfamily.log.LogManager;
 public class Log4jManager
                           extends LogManager
 {
+	private static final List<String> levels;
+	static
+	{
+		levels = Arrays.asList(new String[] {
+		             Level.TRACE.toString(),
+		             Level.DEBUG.toString(),
+		             Level.INFO.toString(),
+		             Level.WARN.toString(),
+		             Level.ERROR.toString(),
+		             Level.FATAL.toString(),
+		             Level.OFF.toString() });
+
+	}
+
 	@Override
 	public void setLoggers(Map<String, String> parameters)
 	{
@@ -56,6 +72,11 @@ public class Log4jManager
 				}
 			}
 		}
+	}
+
+	public List<String> getLevels()
+	{
+		return levels;
 	}
 
 	@Override
