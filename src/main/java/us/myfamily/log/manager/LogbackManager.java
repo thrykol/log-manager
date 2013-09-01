@@ -32,33 +32,46 @@ public class LogbackManager
 		Level currentLevel = log.getLevel();
 		log.setLevel(Level.INFO);
 
-		for(String logger : parameters.keySet())
+		for(String loggerName : parameters.keySet())
 		{
-			Logger logback;
-			String level = parameters.get(logger);
+			Logger logger;
+			String levelName = parameters.get(loggerName);
 
-			if(level == null)
+			if(levelName == null)
 			{
 				continue;
 			}
 
-			log.info("Setting {} to {}", new String[] { logger, level });
+			logger = (Logger)org.slf4j.LoggerFactory.getLogger(loggerName);
 
-			logback = (Logger)org.slf4j.LoggerFactory.getLogger(logger);
-
-			if("unset".equals(level))
+			if("unset".equals(levelName))
 			{
-				if((logback != null) && (logback.getLevel() != null))
+				if((logger != null) && (logger.getLevel() != null))
 				{
-					logback.setLevel(null);
+					log.info("Setting {} to {}", new Object[] { loggerName, "null" });
+					logger.setLevel(null);
+				}
+				else
+				{
+					log.info("Logger {} already unset", loggerName);
 				}
 			}
 			else
 			{
-				Level l = Level.toLevel(level, Level.ERROR);
-				if(logback.getLevel() != l)
+				Level level = Level.toLevel(levelName, Level.ERROR);
+				if(logger.getLevel() != level)
 				{
-					logback.setLevel(l);
+					log.info("Setting {} to {}", new Object[] { loggerName, level });
+					logger.setLevel(level);
+				}
+				else if(loggerName.equals(log.getName()))
+				{
+					log.info("Logger {} will be set to {}", new Object[] { loggerName, level });
+					currentLevel = level;
+				}
+				else
+				{
+					log.info("Logger {} already set to {}", new Object[] { loggerName, level });
 				}
 			}
 		}
@@ -77,28 +90,28 @@ public class LogbackManager
 		TreeSet<LogManager.Wrapper> wrappers = new TreeSet<LogManager.Wrapper>();
 		List<Logger> loggers = ((LoggerContext)org.slf4j.LoggerFactory.getILoggerFactory()).getLoggerList();
 
-		for(Logger l : loggers)
+		for(Logger logger : loggers)
 		{
-			String name = l.getName();
+			String loggerName = logger.getName();
 
 			LogManager.Wrapper w = new Wrapper();
-			w.setLogger(l);
-			w.setName(name);
+			w.setLogger(logger);
+			w.setName(loggerName);
 
 			wrappers.remove(w);
 			wrappers.add(w);
 
 			while(true)
 			{
-				int index = name.lastIndexOf(".");
+				int index = loggerName.lastIndexOf(".");
 				if(index < 0)
 				{
 					break;
 				}
 
-				name = name.substring(0, index);
+				loggerName = loggerName.substring(0, index);
 				w = new Wrapper();
-				w.setName(name);
+				w.setName(loggerName);
 
 				wrappers.add(w);
 			}
@@ -117,8 +130,8 @@ public class LogbackManager
 		{
 			if(this.logger != null)
 			{
-				Logger logback = (Logger)this.logger;
-				Level level = logback.getLevel();
+				Logger logger = (Logger)this.logger;
+				Level level = logger.getLevel();
 				if(level != null)
 				{
 					log.debug(getName() + " -> " + level);
@@ -127,7 +140,7 @@ public class LogbackManager
 
 				for(Level l : LEVELS)
 				{
-					if(logback.isEnabledFor(l))
+					if(logger.isEnabledFor(l))
 					{
 						log.debug("Effective: " + getName() + " -> " + l);
 						return l.toString();
