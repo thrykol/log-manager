@@ -13,6 +13,8 @@ public abstract class LogManager
 
 	public abstract List<String> getLevels();
 
+	public abstract String getLoggerType();
+
 	@EqualsAndHashCode(doNotUseGetters = true, of = "name")
 	public abstract class Wrapper
 	                          implements Comparable<Wrapper>

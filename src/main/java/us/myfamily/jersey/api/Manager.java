@@ -60,7 +60,7 @@ public class Manager
 		}
 		else
 		{
-			result = new JSONObject().put("implementation", LogManagerFactory.logger.getClass().getName())
+			result = new JSONObject().put("implementation", LogManagerFactory.logger.getLoggerType())
 			                          .put("levels", LogManagerFactory.logger.getLevels()).put("loggers", mapping)
 			                          .put("status", "success").toString();
 		}

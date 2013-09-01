@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import us.myfamily.log.LogManager;
+import us.myfamily.log.LogManagerFactory;
 
 @Slf4j
 public class Log4jManager
@@ -72,6 +73,11 @@ public class Log4jManager
 				}
 			}
 		}
+	}
+
+	public String getLoggerType()
+	{
+		return LogManagerFactory.LOG_4J_CLASS;
 	}
 
 	public List<String> getLevels()

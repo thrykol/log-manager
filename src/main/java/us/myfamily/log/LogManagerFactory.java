@@ -13,18 +13,20 @@ public abstract class LogManagerFactory
 {
 	public static final LogManager logger;
 	private static TreeSet<Wrapper> wrappers;
+	public static final String LOG_4J_CLASS = "org.slf4j.impl.Log4jLoggerAdapter";
+	public static final String LOGBACK_CLASS = "ch.qos.logback.classic.Logger";
 
 	static
 	{
 		org.slf4j.Logger slf4jLogger = LoggerFactory.getLogger(LogManagerFactory.class);
 
 		String klass = slf4jLogger.getClass().getName();
-		if(klass.equals("org.slf4j.impl.Log4jLoggerAdapter"))
+		if(klass.equals(LOG_4J_CLASS))
 		{
 			logger = new Log4jManager();
 			wrappers = logger.load();
 		}
-		else if(klass.equals("ch.qos.logback.classic.Logger"))
+		else if(klass.equals(LOGBACK_CLASS))
 		{
 			logger = new LogbackManager();
 			wrappers = logger.load();

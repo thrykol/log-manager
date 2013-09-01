@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import us.myfamily.log.LogManager;
+import us.myfamily.log.LogManagerFactory;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
@@ -77,6 +78,11 @@ public class LogbackManager
 		}
 
 		log.setLevel(currentLevel);
+	}
+
+	public String getLoggerType()
+	{
+		return LogManagerFactory.LOGBACK_CLASS;
 	}
 
 	public List<String> getLevels()

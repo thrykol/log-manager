@@ -17,6 +17,7 @@
 	manager.get = function() {
 		$.get("api/manager", function(json) {
 			if(json.status === "success") {
+				$("div:first").text(json.implementation)
 				manager.load(json.levels, json.loggers);
 			}
 		})
@@ -89,6 +90,7 @@
 </script>
 </head>
 <body>
+	<div></div>
 	<form method="POST">
 		<table>
 			<thead></thead>
