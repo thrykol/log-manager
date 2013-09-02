@@ -5,6 +5,7 @@
 <title>Log Level Manager</title>
 <script type="text/javascript"
 	src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.1/jquery.min.js"></script>
+<script type="text/javascript" src="jstree/jquery.jstree.js"></script>
 <script type="text/javascript">
 	var manager = {};
 
@@ -17,55 +18,9 @@
 	manager.get = function() {
 		$.get("api/manager", function(json) {
 			if(json.status === "success") {
-				$("div:first").text(json.implementation)
-				manager.load(json.levels, json.loggers);
+				$("#manager-logger > span:first").text(json.implementation)
+				manager.tree(json.levels, json.loggers);
 			}
-		})
-	}
-
-	manager.load = function(levels, loggers) {		
-		$("form > table")
-			.children()
-				.empty()
-			.end()
-			.children("thead")
-				.each(function() {
-					var row = $("<tr><td></td></tr>");
-					for(var i = 0; i < levels.length; i++) {
-						row.append("<td>" + levels[i] + "</td>");
-					}
-					$(this).append(row);
-				})
-			.end()
-			.children("tbody")
-				.each(function() {
-					var tbody = $(this);
-					var template = $("<tr><td></td></tr>");
-					
-					for(var i = 0; i < levels.length; i++) {
-						template.append("<td><input type='radio' value='" + levels[i] + "' title='" + levels[i] + "'/></td>")
-					}
-					
-					for(logger in loggers) {
-						var row = template.clone()
-							.children("td:first")
-								.text(logger)
-							.end()
-							.find("input").each(function() {
-								this.name = logger;
-								if(this.value === loggers[logger]) {
-									this.checked = true;
-								}
-							})
-							.end();
-						tbody.append(row);
-					}
-				})
-			.end();
-		
-		$("form > table > tbody > tr input:checked").each(function() {
-			var active = $(this);
-			active.parents("tr:first").prop("active", active.val());
 		})
 	}
 	
@@ -87,17 +42,59 @@
 		
 		return false;
 	}
+	
+	manager.tree = function(levels, loggers) {
+		var cache = {};
+		var open = [];
+		
+		var jsonData = [];
+		for(logger in loggers) {
+			var id = logger.replace(/\./g, "-");
+			open.push(id);
+			cache[logger] = {
+					data : logger,
+					attr : {
+						id : id
+					},
+					metadata : {
+						name : logger,
+						original : loggers[logger]
+					},
+					children : []
+			};
+			
+			var parts = logger.split("\.");
+			if(parts.length === 1) {
+				jsonData.push(cache[logger]);
+			} else {
+				var parent = cache[logger.substring(0, logger.lastIndexOf("\."))];
+				parent.children.push(cache[logger]);
+			}
+		}
+		
+		$("#manager-tree").jstree({ 
+			"json_data" : {
+				"data" : jsonData
+			},
+			core : {
+				initially_open : open,				
+			},
+			themes : {
+				dots : true,
+				icons : true
+			},
+			"plugins" : [ "themes", "json_data", "ui" ]
+		});//.bind("select_node.jstree", function (e, data) { alert(data.rslt.obj.data("id")); });
+	}
 </script>
 </head>
 <body>
-	<div></div>
+	<div id="manager-logger">Logger Implementation: <span></span></div>
 	<form method="POST">
-		<table>
-			<thead></thead>
-			<tbody></tbody>
-		</table>
-		<input type="submit" value="Update"/>
-		<input type="reset" value="Reset"/>
+		<div id="manager-tree"></div>
+		<!-- input type="submit" value="Update"/>
+		<input type="reset" value="Reset"/-->
 	</form>
+	<div id="manager-tree"></div>
 </body>
 </html>
