@@ -24,11 +24,6 @@ public class LogbackManager
 		             Level.WARN.toString(),
 		             Level.ERROR.toString(),
 		             Level.OFF.toString() });
-
-		org.slf4j.LoggerFactory.getLogger("us.myfamily.log.manager.Temp1");
-		org.slf4j.LoggerFactory.getLogger("us.myfamily.log.manager.Temp2");
-		org.slf4j.LoggerFactory.getLogger("us.myfamily.log.manager.Temp3");
-		org.slf4j.LoggerFactory.getLogger("us.myfamily.log.manager.Temp4");
 	}
 
 	@Override

@@ -3,93 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <title>Log Level Manager</title>
+<link href="balloon/balloon.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript"
 	src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.1/jquery.min.js"></script>
+<script type="text/javascript" src="manager.js"></script>
 <script type="text/javascript" src="jstree/jquery.jstree.js"></script>
+<script type="text/javascript" src="balloon/jquery.balloon.min.js"></script>
 <script type="text/javascript">
-	var manager = {};
 
 	$(document).ready(function() {
 		manager.get();
-		
+
 		$("form").on("submit", manager.submit);
 	})
 
-	manager.get = function() {
-		$.get("api/manager", function(json) {
-			if(json.status === "success") {
-				$("#manager-logger > span:first").text(json.implementation)
-				manager.tree(json.levels, json.loggers);
-			}
-		})
-	}
 	
-	manager.submit = function() {
-		var parameters = {};
-		
-		$("form > table > tbody > tr input:checked").each(function() {
-			var input = $(this);
-			var active = input.parents("tr:first").prop("active");
-			
-			if(active !== input.val()) {
-				parameters[input.attr("name")] = input.attr("value");
-			}
-		})
-					
-		$.post("api/manager", parameters, function() {
-			manager.get();
-		});
-		
-		return false;
-	}
-	
-	manager.tree = function(levels, loggers) {
-		var cache = {};
-		var open = [];
-		
-		var jsonData = [];
-		for(logger in loggers) {
-			var id = logger.replace(/\./g, "-");
-			open.push(id);
-			cache[logger] = {
-					data : logger,
-					attr : {
-						id : id
-					},
-					metadata : {
-						name : logger,
-						original : loggers[logger]
-					},
-					children : []
-			};
-			
-			var parts = logger.split("\.");
-			if(parts.length === 1) {
-				jsonData.push(cache[logger]);
-			} else {
-				var parent = cache[logger.substring(0, logger.lastIndexOf("\."))];
-				parent.children.push(cache[logger]);
-			}
-		}
-		
-		$("#manager-tree").jstree({ 
-			"json_data" : {
-				"data" : jsonData
-			},
-			core : {
-				initially_open : open,				
-			},
-			themes : {
-				dots : true,
-				icons : true
-			},
-			"plugins" : [ "themes", "json_data", "ui" ]
-		});//.bind("select_node.jstree", function (e, data) { alert(data.rslt.obj.data("id")); });
-	}
 </script>
 </head>
 <body>
-	<div id="manager-logger">Logger Implementation: <span></span></div>
+	<div id="manager-logger">
+		Logger Implementation: <span></span>
+	</div>
 	<form method="POST">
 		<div id="manager-tree"></div>
 		<!-- input type="submit" value="Update"/>
