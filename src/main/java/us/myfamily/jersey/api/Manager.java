@@ -44,12 +44,16 @@ public class Manager
 	public String get()
 	                          throws JSONException
 	{
-		LinkedHashMap<String, String> mapping = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, Map<String, Object>> mapping = new LinkedHashMap<String, Map<String, Object>>();
 
 		TreeSet<Wrapper> wrappers = LogManagerFactory.getLoggers();
 		for(Wrapper wrapper : wrappers)
 		{
-			mapping.put(wrapper.getName(), wrapper.getLevel());
+			Map<String, Object> level = new HashMap<String, Object>();
+			level.put("level", wrapper.getLevel());
+			level.put("isEffective", wrapper.isEffectiveLevel());
+
+			mapping.put(wrapper.getName(), level);
 		}
 
 		String result;

@@ -38,16 +38,30 @@ manager.tree = function(levels, loggers) {
 	var jsonData = [];
 	for (logger in loggers) {
 		var id = logger.replace(/\./g, "-");
+		var data = $("<span><span></span> - <code></code></span>")
+			.first()
+				.children("span")
+					.text(logger)
+				.end()
+				.children("code")
+					.text(loggers[logger].level)
+				.end()
+			.end();
+		
+		if(loggers[logger].isEffective) {
+			data.find("code").addClass("effective");
+		}
+		
 		loggerIds.push(id);
 		cache[logger] = {
-			data : "<span>" + logger + " - <code>" + loggers[logger]
-					+ "</code></span>",
+			data : "<span>" + data.html() + "</span>", // html returns the children
 			attr : {
 				id : id
 			},
 			metadata : {
 				name : logger,
-				original : loggers[logger]
+				original : loggers[logger].level,
+				effective : loggers[logger].isEffective
 			},
 			children : []
 		};
@@ -63,7 +77,8 @@ manager.tree = function(levels, loggers) {
 		popup.push({
 			logger : logger,
 			id : id,
-			level : loggers[logger]
+			level : loggers[logger].level,
+			effective : loggers[logger].isEffective
 		});
 	}
 
@@ -80,18 +95,16 @@ manager.tree = function(levels, loggers) {
 			icons : true
 		},
 		"plugins" : [ "themes", "json_data", "ui" ]
-	}).bind(
-			"loaded.jstree",
-			function(event, data) {
-				for ( var i = 0; i < popup.length; i++) {
-					manager.balloon(popup[i].logger, popup[i].id,
-							popup[i].level, levels);
-				}
-			});
+	}).bind("loaded.jstree", function(event, data) {
+		for ( var i = 0; i < popup.length; i++) {
+			manager.balloon(popup[i].logger, popup[i].id,
+					popup[i].level, popup[i].effective, levels);
+		}
+	});
 
 }
 
-manager.balloon = function(logger, loggerId, level, levels) {
+manager.balloon = function(logger, loggerId, level, isEffective, levels) {
 	var options = $("<span></span>");
 	for ( var i = 0; i < levels.length; i++) {
 		var option = $("<input type='radio' onclick='manager.select($(this))'/><label></label>")
@@ -102,7 +115,7 @@ manager.balloon = function(logger, loggerId, level, levels) {
 				.prop("loggerId", loggerId)
 			.end()
 			.last()
-				.attr("for", loggerId + "-" + levels[i]).text(levels[i]).end();
+				.attr("for", loggerId + "-" + levels[i]).text(levels[i] + (levels[i] === level ? "*" : "")).end();
 
 		options.append(option);
 	}
@@ -118,10 +131,14 @@ manager.select = function(elem) {
 	var loggerId = elem.prop("loggerId");
 	var logger = $("#" + loggerId);
 	var original = logger.data("original");
+	var effective = logger.data("effective");
 	
 	if(elem.val() === original) {
-		$("a:first > span:first > code", logger).removeClass("pending").text(elem.val());
+		var code = $("a:first > span:first > code", logger).removeClass("pending").text(elem.val());
+		if(effective) {
+			code.addClass("effective");
+		}
 	} else {
-		$("a:first > span:first > code", logger).addClass("pending").text(elem.val());
+		$("a:first > span:first > code", logger).addClass("pending").removeClass("effective").text(elem.val());
 	}
 }

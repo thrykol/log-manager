@@ -59,15 +59,15 @@ public class LogbackManager
 			else
 			{
 				Level level = Level.toLevel(levelName, Level.ERROR);
-				if(logger.getLevel() != level)
-				{
-					log.info("Setting {} to {}", new Object[] { loggerName, level });
-					logger.setLevel(level);
-				}
-				else if(loggerName.equals(log.getName()))
+				if(loggerName.equals(log.getName()) && currentLevel != level)
 				{
 					log.info("Logger {} will be set to {}", new Object[] { loggerName, level });
 					currentLevel = level;
+				}
+				else if(!loggerName.equals(log.getName()) && logger.getLevel() != level)
+				{
+					log.info("Setting {} to {}", new Object[] { loggerName, level });
+					logger.setLevel(level);
 				}
 				else
 				{
@@ -140,6 +140,7 @@ public class LogbackManager
 				if(level != null)
 				{
 					log.debug(getName() + " -> " + level);
+					effectiveLevel = false;
 					return level.toString();
 				}
 

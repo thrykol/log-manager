@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+.pending {
+	font-style: italic;
+	font-weight: bold;
+}
+
+.effective {
+	text-decoration: underline;
+}

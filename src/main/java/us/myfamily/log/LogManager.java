@@ -21,6 +21,7 @@ public abstract class LogManager
 	{
 		protected Object logger;
 		protected String name;
+		protected boolean effectiveLevel = true;
 
 		public void setLogger(Object logger)
 		{
@@ -35,6 +36,11 @@ public abstract class LogManager
 		public Object getLogger()
 		{
 			return this.logger;
+		}
+
+		public boolean isEffectiveLevel()
+		{
+			return this.effectiveLevel;
 		}
 
 		public boolean isBasePackage()
