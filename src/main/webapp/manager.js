@@ -1,5 +1,11 @@
 var manager = {};
 
+$(document).ready(function() {
+	manager.get();
+
+	$("form").on("submit", manager.submit);
+});
+
 manager.get = function() {
 	$.get("api/manager", function(json) {
 		if (json.status === "success") {
@@ -12,14 +18,10 @@ manager.get = function() {
 manager.submit = function() {
 	var parameters = {};
 
-	$("form > table > tbody > tr input:checked").each(function() {
-		var input = $(this);
-		var active = input.parents("tr:first").prop("active");
-
-		if (active !== input.val()) {
-			parameters[input.attr("name")] = input.attr("value");
-		}
-	})
+	$(".pending").each(function() {
+		var name = $(this).parents("li:first").data("name");
+		parameters[name] = this.textContent;
+	});
 
 	$.post("api/manager", parameters, function() {
 		manager.get();
@@ -38,7 +40,7 @@ manager.tree = function(levels, loggers) {
 		var id = logger.replace(/\./g, "-");
 		loggerIds.push(id);
 		cache[logger] = {
-			data : "<span>" + logger + " <code>" + loggers[logger]
+			data : "<span>" + logger + " - <code>" + loggers[logger]
 					+ "</code></span>",
 			attr : {
 				id : id
@@ -59,6 +61,7 @@ manager.tree = function(levels, loggers) {
 		}
 
 		popup.push({
+			logger : logger,
 			id : id,
 			level : loggers[logger]
 		});
@@ -77,18 +80,48 @@ manager.tree = function(levels, loggers) {
 			icons : true
 		},
 		"plugins" : [ "themes", "json_data", "ui" ]
-	}).bind("loaded.jstree", function(event, data) {
-		for ( var i = 0; i < popup.length; i++) {
-			manager.balloon(popup[i].id, popup[i].level, levels);
-		}
-	});
+	}).bind(
+			"loaded.jstree",
+			function(event, data) {
+				for ( var i = 0; i < popup.length; i++) {
+					manager.balloon(popup[i].logger, popup[i].id,
+							popup[i].level, levels);
+				}
+			});
 
 }
 
-manager.balloon = function(loggerId, level, levels) {
+manager.balloon = function(logger, loggerId, level, levels) {
+	var options = $("<span></span>");
+	for ( var i = 0; i < levels.length; i++) {
+		var option = $("<input type='radio' onclick='manager.select($(this))'/><label></label>")
+			.first()
+				.attr("id", loggerId + "-" + levels[i])
+				.attr("name", logger).val(levels[i])
+				.prop("checked", levels[i] === level)
+				.prop("loggerId", loggerId)
+			.end()
+			.last()
+				.attr("for", loggerId + "-" + levels[i]).text(levels[i]).end();
+
+		options.append(option);
+	}
+	
 	$("#" + loggerId + " > a:first > span:first").balloon({
-		contents : "Logger: " + loggerId,
+		contents : options,
 		position : "right",
 		minLifetime : 0
 	});
+}
+
+manager.select = function(elem) {
+	var loggerId = elem.prop("loggerId");
+	var logger = $("#" + loggerId);
+	var original = logger.data("original");
+	
+	if(elem.val() === original) {
+		$("a:first > span:first > code", logger).removeClass("pending").text(elem.val());
+	} else {
+		$("a:first > span:first > code", logger).addClass("pending").text(elem.val());
+	}
 }
