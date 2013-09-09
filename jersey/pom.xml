@@ -1,11 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>us.my-family</groupId>
-	<artifactId>log-manager</artifactId>
+	<parent>
+		<groupId>us.my-family</groupId>
+		<artifactId>log-manager</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>log-manager-jersey-parent</artifactId>
 	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>LogManager Parent</name>
+
+	<name>LogManager Jersey Parent</name>
 	<description>Slf4j logging manager</description>
 	<inceptionYear>2013</inceptionYear>
 	<licenses>
@@ -23,13 +29,9 @@
 	</developers>
 
 	<modules>
-		<module>core</module>
-		<module>jersey</module>
+		<module>api</module>
+		<module>servlet</module>
 	</modules>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
 
 	<dependencies>
 		<dependency>

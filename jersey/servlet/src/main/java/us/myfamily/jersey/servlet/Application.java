@@ -1,8 +1,7 @@
-package us.myfamily.context;
+package us.myfamily.jersey.servlet;
 
 import javax.ws.rs.ApplicationPath;
 import org.glassfish.jersey.server.ResourceConfig;
-import us.myfamily.jersey.LogManager;
 import us.myfamily.jersey.api.Manager;
 
 @ApplicationPath("/")

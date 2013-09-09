@@ -1,4 +1,4 @@
-package us.myfamily.context;
+package us.myfamily.jersey.servlet;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
