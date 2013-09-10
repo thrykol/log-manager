@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LogManager
 {
 
-  @GET
+	@GET
 	@SuppressWarnings("resource")
 	public Response get()
 	                          throws IOException
