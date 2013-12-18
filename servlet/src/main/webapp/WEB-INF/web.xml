@@ -6,10 +6,6 @@
 
 	<display-name>Log Manager Interface</display-name>
 
-	<listener>
-		<listener-class>us.myfamily.jersey.servlet.ContextListener</listener-class>
-	</listener>
-
 	<filter>
 		<filter-name>LogManager</filter-name>
 		<filter-class>org.glassfish.jersey.servlet.ServletContainer</filter-class>
