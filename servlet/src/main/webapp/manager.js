@@ -7,7 +7,7 @@ $(document).ready(function() {
 });
 
 manager.get = function() {
-	$.get("api/manager", function(json) {
+	$.get("manage", function(json) {
 		if (json.status === "success") {
 			$("#manager-logger > span:first").text(json.implementation)
 			manager.tree(json.levels, json.loggers);
@@ -23,7 +23,7 @@ manager.submit = function() {
 		parameters[name] = this.textContent;
 	});
 
-	$.post("api/manager", parameters, function() {
+	$.post("manage", parameters, function() {
 		manager.get();
 	});
 
