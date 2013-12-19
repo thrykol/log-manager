@@ -7,8 +7,8 @@
 	<display-name>Log Manager Interface</display-name>
     
     <filter>
-    	<filter-name>ApiFilter</filter-name>
-    	<filter-class>us.myfamily.jersey.servlet.ApiFilter</filter-class>
+    	<filter-name>ApiRedirect</filter-name>
+    	<filter-class>us.myfamily.jersey.servlet.ApiRedirectFilter</filter-class>
     </filter>
     
 	<servlet>
@@ -26,7 +26,7 @@
 	</servlet>
 	
 	<filter-mapping>
-		<filter-name>ApiFilter</filter-name>
+		<filter-name>ApiRedirect</filter-name>
 		<url-pattern>/logging-ui/manage/*</url-pattern>
 	</filter-mapping>
 	
