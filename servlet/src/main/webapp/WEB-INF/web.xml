@@ -5,21 +5,43 @@
 	id="LogManager" version="2.5" metadata-complete="true">
 
 	<display-name>Log Manager Interface</display-name>
-
-	<filter>
-		<filter-name>LogManager</filter-name>
-		<filter-class>org.glassfish.jersey.servlet.ServletContainer</filter-class>
+    
+    <filter>
+    	<filter-name>ApiFilter</filter-name>
+    	<filter-class>us.myfamily.jersey.servlet.ApiFilter</filter-class>
+    </filter>
+    
+	<servlet>
+		<servlet-name>LoggingServlet</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<init-param>
 			<param-name>javax.ws.rs.Application</param-name>
 			<param-value>us.myfamily.jersey.servlet.Application</param-value>
 		</init-param>
-		<init-param>
-			<param-name>jersey.config.servlet.filter.staticContentRegex</param-name>
-			<param-value>/.*(html|js|css|gif|png)</param-value>
-		</init-param>
-	</filter>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>SampleServlet</servlet-name>
+		<servlet-class>us.myfamily.jersey.servlet.SampleServlet</servlet-class>
+	</servlet>
+	
 	<filter-mapping>
-		<filter-name>LogManager</filter-name>
-		<url-pattern>/*</url-pattern>
+		<filter-name>ApiFilter</filter-name>
+		<url-pattern>/logging-ui/manage/*</url-pattern>
 	</filter-mapping>
+	
+    <servlet-mapping>
+       <servlet-name>default</servlet-name>
+       <url-pattern>/logging-ui/*</url-pattern>
+    </servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>LoggingServlet</servlet-name>
+		<url-pattern>/logging-api/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>SampleServlet</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
 </web-app>
