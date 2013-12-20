@@ -59,3 +59,5 @@ web.xml
 		<servlet-name>LoggingServlet</servlet-name>
 		<url-pattern>/logging-api/*</url-pattern>
 	</servlet-mapping>
+
+Browse to http://localhost:8080/[context]/logging-ui/index.html.
