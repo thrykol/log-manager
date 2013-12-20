@@ -4,10 +4,8 @@ $(document).ready(function() {
 	manager.get();
 
 	$("form").on("submit", manager.submit)
-	    .find("input[type='submit']")
-	    .on("click", function() {
-	      manager.clicked = $(this).attr("name");
-	    });
+		.find("input[type='button']")
+			.on("click", manager.get);
 
 });
 
@@ -21,9 +19,7 @@ manager.get = function() {
 }
 
 manager.submit = function() {
-	var parameters = {
-			reload : manager.clicked === "reload"
-	};
+	var parameters = {};
 
 	$(".pending").each(function() {
 		var name = $(this).parents("li:first").data("name");

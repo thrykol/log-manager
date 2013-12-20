@@ -12,7 +12,6 @@ import us.myfamily.log.manager.LogbackManager;
 public abstract class LogManagerFactory
 {
 	public static final LogManager logger;
-	private static TreeSet<Wrapper> wrappers;
 	public static final String LOG_4J_CLASS = "org.slf4j.impl.Log4jLoggerAdapter";
 	public static final String LOGBACK_CLASS = "ch.qos.logback.classic.Logger";
 
@@ -34,38 +33,26 @@ public abstract class LogManagerFactory
 			log.warn("Logging architecture {} is unhandled.", klass);
 			logger = null;
 		}
-
-		reload();
-	}
-
-	public static void reload()
-	{
-		if(logger != null)
-		{
-			wrappers = logger.load();
-		}
 	}
 
 	public static TreeSet<Wrapper> getLoggers()
 	{
-		return wrappers;
+		if(logger != null)
+		{
+			return logger.load();
+		}
+		else
+		{
+			return new TreeSet<>();
+		}
 	}
 
 	// TODO: return a mapping of log name to status
 	public static void register(Map<String, String> parameters)
 	{
-		if(logger == null)
+		if(logger != null && parameters != null && !parameters.isEmpty())
 		{
-			wrappers = new TreeSet<Wrapper>();
-		}
-		else
-		{
-			if(parameters != null && !parameters.isEmpty())
-			{
-				logger.setLoggers(parameters);
-			}
-
-			wrappers = logger.load();
+			logger.setLoggers(parameters);
 		}
 	}
 }

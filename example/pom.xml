@@ -10,7 +10,7 @@
 	<artifactId>log-manager-example</artifactId>
 	<packaging>war</packaging>
 
-	<name>LogManager Jersey Servlet</name>
+	<name>Example Embedded LogManager Servlet</name>
 	<description>Slf4j logging manager servlet</description>
 
 	<dependencies>

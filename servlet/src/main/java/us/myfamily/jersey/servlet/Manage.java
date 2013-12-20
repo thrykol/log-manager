@@ -47,12 +47,6 @@ public class Manage
 	@Produces(MediaType.APPLICATION_JSON)
 	public BasicResponse post(MultivaluedMap<String, String> parameters)
 	{
-		if(parameters.containsKey("reload") && Boolean.valueOf(parameters.get("reload").get(0)))
-		{
-			LogManagerFactory.reload();
-			parameters.remove("reload");
-		}
-
 		Map<String, String> mapping = new HashMap<String, String>();
 		for(Entry<String, List<String>> entry : parameters.entrySet())
 		{
