@@ -10,9 +10,18 @@ package us.myfamily.jersey.servlet;
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. **/
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
-import javax.ws.rs.*;
+import java.util.TreeSet;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.xml.bind.annotation.XmlElement;
@@ -38,13 +47,19 @@ public class Manage
 	@Produces(MediaType.APPLICATION_JSON)
 	public BasicResponse post(MultivaluedMap<String, String> parameters)
 	{
+		if(parameters.containsKey("reload") && Boolean.valueOf(parameters.get("reload").get(0)))
+		{
+			LogManagerFactory.reload();
+			parameters.remove("reload");
+		}
+
 		Map<String, String> mapping = new HashMap<String, String>();
 		for(Entry<String, List<String>> entry : parameters.entrySet())
 		{
 			mapping.put(entry.getKey(), entry.getValue().get(0));
 		}
 
-		LogManagerFactory.resgister(mapping);
+		LogManagerFactory.register(mapping);
 
 		BasicResponse response = new BasicResponse();
 		response.status = "success";

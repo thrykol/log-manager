@@ -3,7 +3,12 @@ var manager = {};
 $(document).ready(function() {
 	manager.get();
 
-	$("form").on("submit", manager.submit);
+	$("form").on("submit", manager.submit)
+	    .find("input[type='submit']")
+	    .on("click", function() {
+	      manager.clicked = $(this).attr("name");
+	    });
+
 });
 
 manager.get = function() {
@@ -16,7 +21,9 @@ manager.get = function() {
 }
 
 manager.submit = function() {
-	var parameters = {};
+	var parameters = {
+			reload : manager.clicked === "reload"
+	};
 
 	$(".pending").each(function() {
 		var name = $(this).parents("li:first").data("name");

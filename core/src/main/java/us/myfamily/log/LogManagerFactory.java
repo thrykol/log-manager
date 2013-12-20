@@ -24,17 +24,25 @@ public abstract class LogManagerFactory
 		if(klass.equals(LOG_4J_CLASS))
 		{
 			logger = new Log4jManager();
-			wrappers = logger.load();
 		}
 		else if(klass.equals(LOGBACK_CLASS))
 		{
 			logger = new LogbackManager();
-			wrappers = logger.load();
 		}
 		else
 		{
 			log.warn("Logging architecture {} is unhandled.", klass);
 			logger = null;
+		}
+
+		reload();
+	}
+
+	public static void reload()
+	{
+		if(logger != null)
+		{
+			wrappers = logger.load();
 		}
 	}
 
@@ -44,7 +52,7 @@ public abstract class LogManagerFactory
 	}
 
 	// TODO: return a mapping of log name to status
-	public static void resgister(Map<String, String> parameters)
+	public static void register(Map<String, String> parameters)
 	{
 		if(logger == null)
 		{
