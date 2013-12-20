@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="LogManager" version="2.5" metadata-complete="true">
 
-	<display-name>Log Manager Interface</display-name>
+	<display-name>Example Log Manager</display-name>
     
     <filter>
     	<filter-name>ApiRedirect</filter-name>
@@ -33,5 +33,15 @@
 	<servlet-mapping>
 		<servlet-name>LoggingServlet</servlet-name>
 		<url-pattern>/logging-api/*</url-pattern>
+	</servlet-mapping>
+		
+	<servlet>
+		<servlet-name>SampleServlet</servlet-name>
+		<servlet-class>us.myfamily.example.servlet.SampleServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>SampleServlet</servlet-name>
+		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 </web-app>

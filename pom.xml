@@ -25,6 +25,7 @@
 	<modules>
 		<module>core</module>
 		<module>servlet</module>
+		<module>example</module>
 	</modules>
 
 	<properties>

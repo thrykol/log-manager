@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>us.my-family</groupId>
+		<artifactId>log-manager</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>log-manager-example</artifactId>
+	<packaging>war</packaging>
+
+	<name>LogManager Jersey Servlet</name>
+	<description>Slf4j logging manager servlet</description>
+
+	<dependencies>
+
+		<dependency>
+      <groupId>us.my-family</groupId>
+      <artifactId>log-manager-servlet</artifactId>
+      <version>${project.version}</version>
+      <type>war</type>
+      <scope>runtime</scope>
+    </dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+      <scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>example</finalName>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <overlays>
+            <overlay>
+              <groupId>us.my-family</groupId>
+              <artifactId>log-manager-servlet</artifactId>
+            </overlay>
+          </overlays>
+        </configuration>
+      </plugin>
+    </plugins>
+	</build>
+
+</project>
