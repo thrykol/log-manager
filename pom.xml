@@ -4,7 +4,7 @@
 	<groupId>us.my-family</groupId>
 	<artifactId>log-manager</artifactId>
 	<packaging>pom</packaging>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>0.1.1</version>
 	<name>LogManager Parent</name>
 	<description>Slf4j logging manager</description>
 	<inceptionYear>2013</inceptionYear>

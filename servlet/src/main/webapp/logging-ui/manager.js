@@ -40,7 +40,7 @@ manager.tree = function(levels, loggers) {
 
 	var jsonData = [];
 	for (logger in loggers) {
-		var id = logger.replace(/\./g, "-");
+		var id = logger.replace(/[\.\$]/g, "-");
 		var data = $("<span><span></span> - <code></code></span>")
 			.first()
 				.children("span")
